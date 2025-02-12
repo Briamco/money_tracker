@@ -10,7 +10,7 @@ class TransactionsProvider extends ChangeNotifier {
     ),
     Transaction(
       type: TransactionType.expense,
-      amount: -500.00,
+      amount: 500.00,
       description: 'Rent'
     )
   ];
@@ -28,7 +28,7 @@ class TransactionsProvider extends ChangeNotifier {
     return _transactions
         .where((transaction) => transaction.type == TransactionType.expense)
         .map((transaction) => transaction.amount)
-        .fold(0, (a, b) => a + b);
+        .fold(0, (a, b) => a - b);
   }
 
   double getBalance() {

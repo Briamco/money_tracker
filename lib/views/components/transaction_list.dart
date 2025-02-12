@@ -22,6 +22,14 @@ class TransactionList extends StatelessWidget {
           itemCount: transactions.length,
           itemBuilder: (context, index) {
             final transaction = transactions[index];
+            final icon = transaction.type == TransactionType.income 
+              ? Icons.attach_money 
+              : Icons.money_off;
+
+            final color = transaction.type == TransactionType.income 
+              ? Colors.green 
+              : Colors.red;
+
             final type = transaction.type == TransactionType.income 
               ? 'Income' 
               : 'Expense';
@@ -29,12 +37,9 @@ class TransactionList extends StatelessWidget {
             final value = transaction.type == TransactionType.income 
               ? '\$ ${transaction.amount.toStringAsFixed(2)}'
               : '-\$ ${transaction.amount.toStringAsFixed(2)}';
-
-            final color = transaction.type == TransactionType.income 
-              ? Colors.green 
-              : Colors.red;
             
             return ListTile(
+              leading: Icon(icon, color: color),
               title: Text(transaction.description),
               subtitle: Text(type),
               trailing: Text(
