@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:money_tracker/controllers/transactions_provider.dart';
+import 'package:money_tracker/models/transaction.dart';
+import 'package:provider/provider.dart';
 
 class TransactionList extends StatelessWidget {
   const TransactionList({
@@ -7,27 +10,39 @@ class TransactionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final transactions = Provider.of<TransactionsProvider>(context).transactions;
+
     return Expanded(
       child: Container(
         height: 200,
         decoration: const BoxDecoration(
           color: Colors.white,
         ),
-        child: ListView(
-          children: const [
-            ListTile(
-              leading: Icon(Icons.attach_money, color: Colors.green),
-              title: Text('Income'),
-              subtitle: Text('Salary'),
-              trailing: Text('\$ 1,000.00', style: TextStyle(fontSize: 14),),
-            ),
-            ListTile(
-              leading: Icon(Icons.money_off, color: Colors.red),
-              title: Text('Expense'),
-              subtitle: Text('Rent'),
-              trailing: Text('- \$ 500.00', style: TextStyle(fontSize: 14),),
-            ),
-          ],
+        child: ListView.builder(
+          itemCount: transactions.length,
+          itemBuilder: (context, index) {
+            final transaction = transactions[index];
+            final type = transaction.type == TransactionType.income 
+              ? 'Income' 
+              : 'Expense';
+            
+            final value = transaction.type == TransactionType.income 
+              ? '\$ ${transaction.amount.toStringAsFixed(2)}'
+              : '-\$ ${transaction.amount.toStringAsFixed(2)}';
+
+            final color = transaction.type == TransactionType.income 
+              ? Colors.green 
+              : Colors.red;
+            
+            return ListTile(
+              title: Text(transaction.description),
+              subtitle: Text(type),
+              trailing: Text(
+                value, 
+                style: TextStyle(fontSize: 14, color: color),
+              ),
+            );
+          },
         ),
       ),
     );
